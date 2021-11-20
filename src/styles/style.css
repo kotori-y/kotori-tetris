@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#main {
+    position: relative;
+    width: 55vh;
+    height: 90vh;
+    background: rgb(195, 192, 188);
+    /*display: inline-block;*/
+    margin: 5vh auto;
+    border-bottom-right-radius: 55px;
+}
+
+
+#screen-container {
+    position: absolute;
+    width: 90%;
+    height: 38vh;
+    background: rgb(142, 136, 142);
+    margin-top: 5vh;
+    left: 2.7vh;
+    border-bottom-right-radius: 55px;
+    display: flex;
+    align-content: space-around;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+
+#screen {
+    background: rgb(134, 159, 93);
+    height: 33vh;
+    width: 33vh;
+    margin: auto;
+    position: absolute;
+    top: 2vh;
+}
+
+
+#game {
+    width: 20.4vh;
+    height: 100%;
+    border: 1.7vh solid darkolivegreen;
+    border-bottom: none;
+    border-top: none;
+    position: absolute;
+}
+
+#button-group{
+    position: absolute;
+    top: 59vh;
+}
+
+#circle-key {
+    top: 2vh;
+    position: absolute;
+}
+
+#key-left-right, #key-up-down {
+    background: black;
+    width: 5vh;
+    height: 15vh;
+    position: absolute;
+    left: 10vh
+}
+
+
+#key-left-right {
+    transform: rotateZ(90deg);
+}
+
+#key-a, #key-b {
+    width: 6vh;
+    height: 6vh;
+    border-radius: 6vh;
+    background: rgb(147, 48, 90);
+    left: 45vh;
+    position: absolute;
+}
+
+#key-b {
+    top: 5vh;
+    left: 38vh;
+}
