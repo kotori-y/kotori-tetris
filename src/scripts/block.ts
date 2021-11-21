@@ -13,8 +13,8 @@ abstract class BasicBlock {
   blockWidth: number
   positions: Array<Position>
 
-  offsetLeft: number
-  offsetTop: number
+  protected _offsetLeft: number
+  protected _offsetTop: number
 
   fallDownSpeed: number
 
@@ -24,11 +24,25 @@ abstract class BasicBlock {
     this.fixedBlocks = document.getElementById("game")!.getElementsByClassName("fixed")
     this.blockWidth = this.game.clientWidth / 10
 
-    this.offsetLeft = 3
-    this.offsetTop = -1
+    this._offsetLeft = 3
+    this._offsetTop = -3
 
     this.positions = positions
-    this.fallDownSpeed = 500
+    this.fallDownSpeed = 300
+  }
+
+  get offsetLeft() {
+    return this._offsetLeft
+  }
+
+  set offsetLeft(left: number) {
+    this._offsetLeft = left
+    this.locateBlock()
+  }
+
+  set offsetTop(top: number) {
+    this._offsetTop = top
+    this.locateBlock()
   }
 
   generate(): void {
@@ -44,39 +58,58 @@ abstract class BasicBlock {
     for (let i: number = 0; i <= 3; i++) {
       const position: Position = this.positions[i]
       const block: HTMLElement = this.blocks[i] as HTMLElement
-      block.style.left = `${(this.offsetLeft + position.col) * this.blockWidth}px`
-      block.style.top = `${(this.offsetTop + position.row) * this.blockWidth}px`
+      block.style.left = `${(this._offsetLeft + position.col) * this.blockWidth}px`
+      block.style.top = `${(this._offsetTop + position.row) * this.blockWidth}px`
     }
   }
 
   fallDown(): Promise<any> {
     return this.interval(this.fallDownSpeed, (resolve: Function, task: number): void => {
 
+      this._offsetTop++
+      this.locateBlock()
+
       if (this.isTouchBottom()) {
-        Array.from(this.blocks).forEach(block => block.classList.add("fixed"))
-        Array.from(this.blocks).forEach(block => block.classList.remove("active"))
         clearInterval(task)
         resolve()
-        return;
       }
 
-      this.offsetTop++
-      this.locateBlock()
-    })
+    }).then(() => this.sleep(800))
+      .then(() => {
+        if (this.isTouchBottom()) {
+          Array.from(this.blocks).forEach(block => block.classList.add("fixed"))
+          Array.from(this.blocks).forEach(block => block.classList.remove("active"))
+        } else {
+          return this.fallDown()
+        }
+      })
   }
 
-
-  private computeMinDistance(block: HTMLElement, direction: string): number {
+   computeMinDistance(block: HTMLElement, direction: string): number {
     let minDistance = Number.MAX_VALUE
+
     for (let i: number = 0; i < this.fixedBlocks.length; i++) {
       const fixBlock: HTMLElement = this.fixedBlocks[i] as HTMLElement
-      let tmp: number = direction === "Y"
-        ? ((block.offsetLeft === fixBlock.offsetLeft) && (block.offsetTop - fixBlock.offsetTop)) || Number.MAX_VALUE
-        : ((block.offsetLeft === fixBlock.offsetLeft) && (block.offsetTop - fixBlock.offsetTop)) || Number.MAX_VALUE
-      tmp = Math.abs(tmp)
-      if (tmp < minDistance) {
+      let tmp: number = Number.MAX_VALUE;
+
+      switch (direction) {
+        case "down":
+          tmp = ((block.offsetLeft === fixBlock.offsetLeft) && (fixBlock.offsetTop - block.offsetTop)) || Number.MAX_VALUE;
+          break;
+        case "left":
+          tmp = ((block.offsetTop === fixBlock.offsetTop) && (block.offsetLeft - fixBlock.offsetLeft)) || Number.MAX_VALUE;
+          break;
+        case "right":
+          tmp = ((block.offsetTop === fixBlock.offsetTop) && (fixBlock.offsetLeft - block.offsetLeft)) || Number.MAX_VALUE;
+          break;
+        default:
+          break
+      }
+
+      if (tmp < minDistance && tmp > 0) {
         minDistance = tmp
       }
+
     }
     return minDistance
   }
@@ -84,19 +117,25 @@ abstract class BasicBlock {
   isTouchBottom(): Boolean {
     for (let i: number = 0; i <= 3; i++) {
       const block: HTMLElement = this.blocks[i] as HTMLElement
-      const minDistance = this.computeMinDistance(block, "Y")
-      if (minDistance <= this.blockWidth || block.offsetTop == (this.game.clientHeight - this.blockWidth)) {
+      const minDistance = this.computeMinDistance(block, "down")
+      if ((minDistance <= this.blockWidth && minDistance > 0 )|| block.offsetTop == (this.game.clientHeight - this.blockWidth)) {
         return true
       }
     }
     return false
   }
 
-  protected interval(delay: number, callback: Function): Promise<any> {
+  private interval(delay: number, callback: Function): Promise<any> {
     return new Promise(resolve => {
       let task = setInterval(() => {
         callback(resolve, task)
       }, delay)
+    })
+  }
+
+  private async sleep(delay: number): Promise<void> {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(), delay)
     })
   }
 
@@ -129,10 +168,10 @@ export class Hero extends BasicBlock {
    */
   constructor() {
     super([
-      {row: 1, col: 0},
-      {row: 1, col: 1},
-      {row: 1, col: 2},
-      {row: 1, col: 3}
+      {row: 2, col: 0},
+      {row: 2, col: 1},
+      {row: 2, col: 2},
+      {row: 2, col: 3}
     ]);
   }
 }
