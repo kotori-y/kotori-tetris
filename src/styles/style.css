@@ -12,6 +12,7 @@
     /*display: inline-block;*/
     margin: 30px auto;
     border-bottom-right-radius: 55px;
+    z-index: 888;
 }
 
 #screen-container {
@@ -19,13 +20,29 @@
     width: 90%;
     height: 285px;
     background: rgb(142, 136, 142);
-    margin-top: 50px;
+    top: 50px;
     left: 20px;
     border-bottom-right-radius: 55px;
     display: flex;
     align-content: space-around;
     flex-direction: row;
     justify-content: space-around;
+}
+
+#cover {
+    width: 100%;
+    height: 13px;
+    background: rgb(142, 136, 142);
+    z-index: 999;
+}
+
+#head {
+    height: 20px;
+    width: 100%;
+    background: rgb(195, 192, 188);
+    top: 30px;
+    position: absolute;
+    z-index: 999;
 }
 
 #screen {
@@ -49,6 +66,7 @@
 #button-group{
     position: absolute;
     top: 450px;
+    z-index: 999;
 }
 
 #circle-key {
