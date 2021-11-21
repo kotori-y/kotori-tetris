@@ -6,22 +6,21 @@
 
 #main {
     position: relative;
-    width: 55vh;
-    height: 90vh;
+    width: 410px;
+    height: 674px;
     background: rgb(195, 192, 188);
     /*display: inline-block;*/
-    margin: 5vh auto;
+    margin: 30px auto;
     border-bottom-right-radius: 55px;
 }
-
 
 #screen-container {
     position: absolute;
     width: 90%;
-    height: 38vh;
+    height: 285px;
     background: rgb(142, 136, 142);
-    margin-top: 5vh;
-    left: 2.7vh;
+    margin-top: 50px;
+    left: 20px;
     border-bottom-right-radius: 55px;
     display: flex;
     align-content: space-around;
@@ -29,21 +28,19 @@
     justify-content: space-around;
 }
 
-
 #screen {
     background: rgb(134, 159, 93);
-    height: 33vh;
-    width: 33vh;
+    height: 260px;
+    width: 260px;
     margin: auto;
     position: absolute;
-    top: 2vh;
+    top: 14px;
 }
 
-
 #game {
-    width: 20.4vh;
+    width: 156px;
     height: 100%;
-    border: 1.7vh solid darkolivegreen;
+    border: 13px solid #3e4c22;
     border-bottom: none;
     border-top: none;
     position: absolute;
@@ -51,37 +48,44 @@
 
 #button-group{
     position: absolute;
-    top: 59vh;
+    top: 450px;
 }
 
 #circle-key {
-    top: 2vh;
+    top: 15px;
     position: absolute;
 }
 
 #key-left-right, #key-up-down {
     background: black;
-    width: 5vh;
-    height: 15vh;
+    width: 40px;
+    height: 120px;
     position: absolute;
-    left: 10vh
+    left: 80px
 }
-
 
 #key-left-right {
     transform: rotateZ(90deg);
 }
 
 #key-a, #key-b {
-    width: 6vh;
-    height: 6vh;
-    border-radius: 6vh;
+    width: 45px;
+    height: 45px;
+    border-radius: 45px;
     background: rgb(147, 48, 90);
-    left: 45vh;
+    left: 340px;
     position: absolute;
 }
 
 #key-b {
-    top: 5vh;
-    left: 38vh;
+    top: 35px;
+    left: 285px;
+}
+
+.block {
+    width: 13px;
+    height: 13px;
+    border: 3px solid;
+    position: absolute;
+    background-color: darkolivegreen;
 }
