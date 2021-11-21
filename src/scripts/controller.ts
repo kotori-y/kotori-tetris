@@ -98,9 +98,6 @@ export class Controller {
       const position = this.nowBlock.positions[i];
       [position.row, position.col] = [position.col, 3 - position.row];
     }
-    // if (this.isOverlap()) {
-    //   console.log("Overlap")
-    // }
   }
 
   private keyDownEvent(event: KeyboardEvent) {
@@ -122,6 +119,46 @@ export class Controller {
     }
   }
 
+  private removeLine() {
+    const count = new Map()
+    const shouldRemovedRow: Array<number> = []
+    const shouldRemovedBlock: Array<HTMLElement> = []
+    const shouldDownBlock: Array<HTMLElement> = []
+
+    for (let i: number = 0; i < this.nowBlock.fixedBlocks.length; i++) {
+      const fixed: HTMLElement = this.nowBlock.fixedBlocks[i] as HTMLElement
+      const top = fixed.offsetTop
+      count.set(top, (count.get(top)||0) + 1)
+      if (count.get(top) === 10) {
+        shouldRemovedRow.push(top)
+      }
+    }
+
+    for (let i: number = 0; i < this.nowBlock.fixedBlocks.length; i++) {
+      const fixed: HTMLElement = this.nowBlock.fixedBlocks[i] as HTMLElement
+      const top = fixed.offsetTop
+
+      if (shouldRemovedRow.indexOf(top) !== -1) {
+        shouldRemovedBlock.push(fixed)
+        continue
+      }
+
+      const flag: Boolean = shouldRemovedRow.some(row => {
+        return top < row
+      })
+
+      if (flag) shouldDownBlock.push(fixed)
+
+    }
+
+    shouldRemovedBlock.forEach(elem => elem.remove())
+    shouldDownBlock.forEach(elem => {
+      elem.style.top = `${elem.offsetTop + this.nowBlock.blockWidth * shouldRemovedRow.length}px`
+    })
+
+
+  }
+
   async start(): Promise<void> {
     while (this.isLive) {
 
@@ -132,6 +169,7 @@ export class Controller {
       const index = this.choose()
       this.createBlockObject(index)
       await this.nowBlock.run()
+      this.removeLine()
       this.checkOverFlow()
     }
   }
