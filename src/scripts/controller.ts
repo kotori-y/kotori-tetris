@@ -68,7 +68,6 @@ export class Controller {
 
       const minLeft = this.nowBlock.computeMinDistance(block, "left")
       const minRight =this.nowBlock.computeMinDistance(block, "right")
-      console.log(minRight, minRight > this.nowBlock.blockWidth)
 
       tmpL = tmpL && (block.offsetLeft > 0) && (minLeft > this.nowBlock.blockWidth)
       tmpR = tmpR && block.offsetLeft !== (this.nowBlock.game.clientWidth - this.nowBlock.blockWidth) && (minRight > this.nowBlock.blockWidth)
@@ -82,6 +81,28 @@ export class Controller {
     this.nowBlock.offsetLeft += step
   }
 
+
+  private isOverlap(): Boolean {
+    for (let i: number = 0; i <= 3; i++) {
+      const block: HTMLElement = this.nowBlock.blocks[i] as HTMLElement
+      const distance: number = this.nowBlock.computeMinDistance(block, "down")
+      if (distance === 0) {
+        return true
+      }
+    }
+    return false
+  }
+
+  private rotate(): void {
+    for (let i: number = 0; i <= 3; i++) {
+      const position = this.nowBlock.positions[i];
+      [position.row, position.col] = [position.col, 3 - position.row];
+    }
+    // if (this.isOverlap()) {
+    //   console.log("Overlap")
+    // }
+  }
+
   private keyDownEvent(event: KeyboardEvent) {
     event.preventDefault()
     this.checkMoveStatus()
@@ -92,6 +113,9 @@ export class Controller {
         break;
       case "ArrowRight":
         if (this.allowRight) this.move("right");
+        break;
+      case "ArrowUp":
+        this.rotate()
         break;
       default:
         break
