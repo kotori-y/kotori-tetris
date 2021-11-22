@@ -164,7 +164,7 @@ export class Controller {
       const fixed: HTMLElement = this.nowBlock.fixedBlocks[i] as HTMLElement
       const top = fixed.offsetTop
       count.set(top, (count.get(top) || 0) + 1)
-      if (count.get(top) === 10) {
+      if (count.get(top) >= 10) {
         shouldRemovedRow.push(top)
       }
     }
@@ -188,7 +188,15 @@ export class Controller {
 
     shouldRemovedBlock.forEach(elem => elem.remove())
     shouldDownBlock.forEach(elem => {
-      elem.style.top = `${elem.offsetTop + this.nowBlock.blockWidth * shouldRemovedRow.length}px`
+      const elemTop = elem.offsetTop
+      let n: number = 0
+
+      for (let i: number = 0; i < shouldRemovedRow.length; i++) {
+        if (shouldRemovedRow[i] > elemTop) {
+          n++
+        }
+      }
+      elem.style.top = `${elemTop + this.nowBlock.blockWidth * n}px`
     })
 
 
@@ -198,7 +206,7 @@ export class Controller {
     while (this.isLive) {
 
       if (this.avaIndex.length === 0) {
-        this.avaIndex = [0, 1, 2, 3, 4, 5, 6]
+        this.avaIndex = [...Array(7).keys()].concat([...Array(7).keys()])
       }
 
       const index = this.choose()
@@ -211,7 +219,7 @@ export class Controller {
 
 
   init(): void {
-    this.avaIndex = [0, 1, 2, 3, 4, 5, 6]
+    this.avaIndex = [...Array(7).keys()].concat([...Array(7).keys()])
     document.addEventListener("keydown", this.keyDownEvent.bind(this))
   }
 }
