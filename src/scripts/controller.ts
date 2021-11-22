@@ -100,6 +100,12 @@ export class Controller {
     }
   }
 
+  private fastDown(): void {
+    if (!this.nowBlock.isTouchBottom()) {
+      this.nowBlock.offsetTop += 1
+    }
+  }
+
   private keyDownEvent(event: KeyboardEvent) {
     event.preventDefault()
     this.checkMoveStatus()
@@ -113,6 +119,9 @@ export class Controller {
         break;
       case "ArrowUp":
         this.rotate()
+        break;
+      case "ArrowDown":
+        this.fastDown()
         break;
       default:
         break

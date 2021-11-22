@@ -31,6 +31,10 @@ abstract class BasicBlock {
     this.fallDownSpeed = 300
   }
 
+  get offsetTop() {
+    return this._offsetTop
+  }
+
   get offsetLeft() {
     return this._offsetLeft
   }
