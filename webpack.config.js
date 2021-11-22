@@ -3,7 +3,7 @@ const HTMLWebpackPlugin = require("html-webpack-plugin")
 const {CleanWebpackPlugin} = require("clean-webpack-plugin")
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   entry: "./src/scripts/index.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
