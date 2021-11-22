@@ -66,13 +66,14 @@ abstract class BasicBlock {
   fallDown(): Promise<any> {
     return this.interval(this.fallDownSpeed, (resolve: Function, task: number): void => {
 
-      this._offsetTop++
-      this.locateBlock()
-
       if (this.isTouchBottom()) {
         clearInterval(task)
         resolve()
+        return
       }
+
+      this._offsetTop++
+      this.locateBlock()
 
     }).then(() => this.sleep(800))
       .then(() => {
