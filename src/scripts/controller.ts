@@ -1,4 +1,4 @@
-import {SmashBoy, Hero, Teewee, OrangeRicky, BlueRicky, ClevelandZ, RhodeIslandZ} from "./block"
+import {BlueRicky, ClevelandZ, Hero, OrangeRicky, RhodeIslandZ, SmashBoy, Teewee} from "./block"
 
 
 export class Controller {
@@ -55,6 +55,7 @@ export class Controller {
       const block: HTMLElement = this.nowBlock.fixedBlocks[i] as HTMLElement
       if (block.offsetTop < 0) {
         this.isLive = false
+        this.overGame().then()
       }
     }
   }
@@ -67,7 +68,7 @@ export class Controller {
       const block: HTMLElement = this.nowBlock.blocks[i] as HTMLElement
 
       const minLeft = this.nowBlock.computeMinDistance(block, "left")
-      const minRight =this.nowBlock.computeMinDistance(block, "right")
+      const minRight = this.nowBlock.computeMinDistance(block, "right")
 
       tmpL = tmpL && (block.offsetLeft > 0) && (minLeft > this.nowBlock.blockWidth)
       tmpR = tmpR && block.offsetLeft !== (this.nowBlock.game.clientWidth - this.nowBlock.blockWidth) && (minRight > this.nowBlock.blockWidth)
@@ -106,25 +107,50 @@ export class Controller {
     }
   }
 
+  private async overGame(): Promise<void> {
+    const overBlock: Array<Array<HTMLElement>> = []
+
+    for (let row: number = 0; row < 20; row++) {
+      const tmp: Array<HTMLElement> = []
+      for (let col: number = 0; col < 10; col++) {
+        const block = document.createElement("div");
+        block.classList.add(...["block", "fixed"])
+        block.style.top = `${row * this.nowBlock.blockWidth}px`
+        block.style.left = `${col * this.nowBlock.blockWidth}px`
+        tmp.push(block)
+      }
+      overBlock.push(tmp)
+    }
+
+    for (let i = 0; i < overBlock.length; i++) {
+      const row = overBlock[i]
+      row.forEach((elem: HTMLElement) => this.nowBlock.game.appendChild(elem))
+      await this.nowBlock.sleep(100)
+    }
+
+  }
+
   private keyDownEvent(event: KeyboardEvent) {
     event.preventDefault()
-    this.checkMoveStatus()
 
-    switch (event.key) {
-      case "ArrowLeft":
-        if (this.allowLeft) this.move("left");
-        break;
-      case "ArrowRight":
-        if (this.allowRight) this.move("right");
-        break;
-      case "ArrowUp":
-        this.rotate()
-        break;
-      case "ArrowDown":
-        this.fastDown()
-        break;
-      default:
-        break
+    if (this.isLive) {
+      this.checkMoveStatus()
+      switch (event.key) {
+        case "ArrowLeft":
+          if (this.allowLeft) this.move("left");
+          break;
+        case "ArrowRight":
+          if (this.allowRight) this.move("right");
+          break;
+        case "ArrowUp":
+          this.rotate()
+          break;
+        case "ArrowDown":
+          this.fastDown()
+          break;
+        default:
+          break
+      }
     }
   }
 
@@ -137,7 +163,7 @@ export class Controller {
     for (let i: number = 0; i < this.nowBlock.fixedBlocks.length; i++) {
       const fixed: HTMLElement = this.nowBlock.fixedBlocks[i] as HTMLElement
       const top = fixed.offsetTop
-      count.set(top, (count.get(top)||0) + 1)
+      count.set(top, (count.get(top) || 0) + 1)
       if (count.get(top) === 10) {
         shouldRemovedRow.push(top)
       }
@@ -186,6 +212,6 @@ export class Controller {
 
   init(): void {
     this.avaIndex = [0, 1, 2, 3, 4, 5, 6]
-    document.addEventListener("keydown", e => this.keyDownEvent(e))
+    document.addEventListener("keydown", this.keyDownEvent.bind(this))
   }
 }

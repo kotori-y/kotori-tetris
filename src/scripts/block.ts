@@ -138,7 +138,7 @@ abstract class BasicBlock {
     })
   }
 
-  private async sleep(delay: number): Promise<void> {
+  async sleep(delay: number): Promise<void> {
     return new Promise(resolve => {
       setTimeout(() => resolve(), delay)
     })
