@@ -18,7 +18,7 @@ abstract class BasicBlock {
 
   fallDownSpeed: number
 
-  protected constructor(positions: Array<Position>) {
+  protected constructor(positions: Array<Position>, fallDownSpeed: number) {
     this.game = document.querySelector("#game") as HTMLElement
     this.blocks = document.getElementById("game")!.getElementsByClassName("active")
     this.fixedBlocks = document.getElementById("game")!.getElementsByClassName("fixed")
@@ -28,7 +28,7 @@ abstract class BasicBlock {
     this._offsetTop = -3
 
     this.positions = positions
-    this.fallDownSpeed = 300
+    this.fallDownSpeed = fallDownSpeed
   }
 
   get offsetTop() {
@@ -156,13 +156,13 @@ export class SmashBoy extends BasicBlock {
    * OO
    * OO
    */
-  constructor() {
+  constructor(fallDownSpeed: number) {
     super([
       {row: 1, col: 1},
       {row: 1, col: 2},
       {row: 2, col: 1},
       {row: 2, col: 2}
-    ]);
+    ], fallDownSpeed);
   }
 }
 
@@ -171,13 +171,13 @@ export class Hero extends BasicBlock {
   /**
    * OOOO
    */
-  constructor() {
+  constructor(fallDownSpeed: number) {
     super([
       {row: 2, col: 0},
       {row: 2, col: 1},
       {row: 2, col: 2},
       {row: 2, col: 3}
-    ]);
+    ], fallDownSpeed);
   }
 }
 
@@ -186,13 +186,13 @@ export class Teewee extends BasicBlock {
    *   O
    * O O O
    */
-  constructor() {
+  constructor(fallDownSpeed: number) {
     super([
       {row: 1, col: 1},
       {row: 2, col: 0},
       {row: 2, col: 1},
       {row: 2, col: 2}
-    ]);
+    ], fallDownSpeed);
   }
 
 }
@@ -202,13 +202,13 @@ export class OrangeRicky extends BasicBlock {
    *     O
    * O O O
    */
-  constructor() {
+  constructor(fallDownSpeed: number) {
     super([
       {row: 1, col: 2},
       {row: 2, col: 0},
       {row: 2, col: 1},
       {row: 2, col: 2}
-    ]);
+    ], fallDownSpeed);
   }
 }
 
@@ -217,13 +217,13 @@ export class BlueRicky extends BasicBlock {
    *  O
    * O O O
    */
-  constructor() {
+  constructor(fallDownSpeed: number) {
     super([
       {row: 1, col: 0},
       {row: 2, col: 0},
       {row: 2, col: 1},
       {row: 2, col: 2}
-    ]);
+    ], fallDownSpeed);
   }
 }
 
@@ -232,13 +232,13 @@ export class ClevelandZ extends BasicBlock {
    *  O O
    *    O O
    */
-  constructor() {
+  constructor(fallDownSpeed: number) {
     super([
       {row: 1, col: 0},
       {row: 1, col: 1},
       {row: 2, col: 1},
       {row: 2, col: 2}
-    ]);
+    ], fallDownSpeed);
   }
 }
 
@@ -247,12 +247,12 @@ export class RhodeIslandZ extends BasicBlock {
    *    O O
    *  O O
    */
-  constructor() {
+  constructor(fallDownSpeed: number) {
     super([
       {row: 2, col: 0},
       {row: 2, col: 1},
       {row: 1, col: 1},
       {row: 1, col: 2}
-    ]);
+    ], fallDownSpeed);
   }
 }

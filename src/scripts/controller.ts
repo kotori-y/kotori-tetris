@@ -6,6 +6,7 @@ export class Controller {
   avaIndex: Array<number>
   nowBlock: SmashBoy | Hero | Teewee | OrangeRicky | BlueRicky | ClevelandZ | RhodeIslandZ
   nextBlock: SmashBoy | Hero | Teewee | OrangeRicky | BlueRicky | ClevelandZ | RhodeIslandZ
+
   isLive: Boolean
   allowLeft: Boolean
   allowRight: Boolean
@@ -15,8 +16,11 @@ export class Controller {
   linePanel: HTMLElement
   nextPanel: HTMLElement
 
+  fallDownSpeed: number
+
   constructor() {
     this.isLive = true
+    this.fallDownSpeed = 300
 
     this.scorePanel = document.querySelector("#score") as HTMLElement
     this.levelPanel = document.querySelector("#level") as HTMLElement
@@ -36,19 +40,19 @@ export class Controller {
   createBlockObject(index: number): any {
     switch (index) {
       case 0:
-        return new SmashBoy()
+        return new SmashBoy(this.fallDownSpeed)
       case 1:
-        return new Hero()
+        return new Hero(this.fallDownSpeed)
       case 2:
-        return new Teewee()
+        return new Teewee(this.fallDownSpeed)
       case 3:
-        return new OrangeRicky()
+        return new OrangeRicky(this.fallDownSpeed)
       case 4:
-        return new BlueRicky()
+        return new BlueRicky(this.fallDownSpeed)
       case 5:
-        return new ClevelandZ()
+        return new ClevelandZ(this.fallDownSpeed)
       case 6:
-        return new RhodeIslandZ()
+        return new RhodeIslandZ(this.fallDownSpeed)
     }
   }
 
@@ -156,6 +160,18 @@ export class Controller {
     }
   }
 
+  private adjustSpeed() {
+    const tmp: number = this.fallDownSpeed > 100
+      ? 50
+      : this.fallDownSpeed > 50
+        ? 25
+        : this.fallDownSpeed > 10
+          ? 10
+          : 0
+
+    this.fallDownSpeed -= tmp
+  }
+
   private updatePanel(nLine: number): void {
     if (nLine === 0) {
       return;
@@ -165,14 +181,14 @@ export class Controller {
 
     const nowLines: number = parseInt(this.linePanel.innerText)
     const newLines: number = nowLines + nLine
-
     this.linePanel.innerText = `${newLines}`
 
-    if (newLines % 10 === 0) {
-      const nowLevel: number = parseInt(this.levelPanel.innerText)
-      this.levelPanel.innerText = `${nowLevel + 1}`
+    const currLevel: number = ((newLines / 10) | 0) + 1
+    const prevLevel: number = parseInt(this.levelPanel.innerText)
+    this.levelPanel.innerText = `${currLevel}`
+    if (currLevel > prevLevel) {
+      this.adjustSpeed()
     }
-
   }
 
   private removeLine() {
@@ -256,6 +272,7 @@ export class Controller {
       this.checkOverFlow()
 
       this.nowBlock = this.nextBlock
+      this.nowBlock.fallDownSpeed = this.fallDownSpeed
 
       let nextIndex = this.choose()
       this.nextBlock = this.createBlockObject(nextIndex)
