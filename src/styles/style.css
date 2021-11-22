@@ -107,3 +107,84 @@
     position: absolute;
     background-color: darkolivegreen;
 }
+
+#panel {
+    position: absolute;
+    height: 100%;
+    width: 104px;
+    left: 156px;
+    background: #597233;
+}
+
+
+@font-face {
+    font-family: gba early;
+    src: url("../sources/Early GameBoy.ttf");
+}
+
+.score-title {
+    position: absolute;
+    display: inline-block;
+    top: 16px;
+    left: 10px;
+    background: rgb(134, 159, 93);
+    width: 80%;
+    height: 30px;
+    font-size: 14px;
+    align-items: center;
+    text-align: center;
+    line-height: 30px;
+    font-family: "gba early", serif;
+    border-radius: 3px;
+    z-index: 999;
+}
+
+.score-decoration {
+    position: absolute;
+    width: 100%;
+    background: rgb(162, 187, 123);
+    height: 48px;
+    top: 33px;
+}
+
+#decoration1 {
+    position: absolute;
+    width: 100%;
+    height: 16px;
+    top: 3px;
+    background: rgb(30, 59, 59);
+}
+
+#score {
+    position: absolute;
+    width: 100%;
+    height: 24px;
+    top: 22px;
+    border: 2px solid rgb(30, 59, 59);
+    border-left: none;
+    border-right: none;
+    text-align: right;
+    line-height: 21px;
+    font-family: "gba early", serif;
+    font-size: 12px;
+}
+
+.stage {
+    position: absolute;
+    background: rgb(162, 187, 123);
+    width: 87%;
+    height: 30px;
+    top: 97px;
+    left: 6px;
+    border-radius: 3px;
+}
+
+.stage p {
+    font-family: "gba early", serif;
+    font-size: 12px;
+    text-align: right;
+}
+
+.stage.lines {
+    top: 133px;
+}

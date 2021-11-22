@@ -8,9 +8,17 @@ export class Controller {
   isLive: Boolean
   allowLeft: Boolean
   allowRight: Boolean
+  scorePanel: HTMLElement
+  levelPanel: HTMLElement
+  linePanel: HTMLElement
 
   constructor() {
     this.isLive = true
+
+    this.scorePanel = document.querySelector("#score") as HTMLElement
+    this.levelPanel = document.querySelector("#level") as HTMLElement
+    this.linePanel = document.querySelector("#line") as HTMLElement
+
     this.init()
   }
 
@@ -154,6 +162,26 @@ export class Controller {
     }
   }
 
+  private updatePanel(nLine: number): void {
+    if (nLine === 0) {
+      return;
+    }
+    const nowScore: number = parseInt(this.scorePanel.innerText)
+    this.scorePanel.innerText = `${nowScore + 100 * nLine}`
+
+    const nowLines: number = parseInt(this.linePanel.innerText)
+    const newLines: number = nowLines + nLine
+
+    this.linePanel.innerText = `${newLines}`
+
+    if (newLines % 10 === 0) {
+      const nowLevel: number = parseInt(this.levelPanel.innerText)
+      this.levelPanel.innerText = `${nowLevel + 1}`
+    }
+
+  }
+
+
   private removeLine() {
     const count = new Map()
     const shouldRemovedRow: Array<number> = []
@@ -199,7 +227,7 @@ export class Controller {
       elem.style.top = `${elemTop + this.nowBlock.blockWidth * n}px`
     })
 
-
+    this.updatePanel(shouldRemovedRow.length)
   }
 
   async start(): Promise<void> {
