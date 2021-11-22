@@ -5,12 +5,15 @@ export class Controller {
 
   avaIndex: Array<number>
   nowBlock: SmashBoy | Hero | Teewee | OrangeRicky | BlueRicky | ClevelandZ | RhodeIslandZ
+  nextBlock: SmashBoy | Hero | Teewee | OrangeRicky | BlueRicky | ClevelandZ | RhodeIslandZ
   isLive: Boolean
   allowLeft: Boolean
   allowRight: Boolean
+
   scorePanel: HTMLElement
   levelPanel: HTMLElement
   linePanel: HTMLElement
+  nextPanel: HTMLElement
 
   constructor() {
     this.isLive = true
@@ -18,6 +21,7 @@ export class Controller {
     this.scorePanel = document.querySelector("#score") as HTMLElement
     this.levelPanel = document.querySelector("#level") as HTMLElement
     this.linePanel = document.querySelector("#line") as HTMLElement
+    this.nextPanel = document.querySelector("#next") as HTMLElement
 
     this.init()
   }
@@ -29,33 +33,23 @@ export class Controller {
     return index
   }
 
-  createBlockObject(index: number): void {
+  createBlockObject(index: number): any {
     switch (index) {
       case 0:
-        this.nowBlock = new SmashBoy()
-        break;
+        return new SmashBoy()
       case 1:
-        this.nowBlock = new Hero()
-        break;
+        return new Hero()
       case 2:
-        this.nowBlock = new Teewee()
-        break;
+        return new Teewee()
       case 3:
-        this.nowBlock = new OrangeRicky()
-        break;
+        return new OrangeRicky()
       case 4:
-        this.nowBlock = new BlueRicky()
-        break;
+        return new BlueRicky()
       case 5:
-        this.nowBlock = new ClevelandZ()
-        break;
+        return new ClevelandZ()
       case 6:
-        this.nowBlock = new RhodeIslandZ()
-        break;
+        return new RhodeIslandZ()
     }
-
-    this.allowLeft = true
-    this.allowRight = true
   }
 
   private checkOverFlow(): void {
@@ -181,7 +175,6 @@ export class Controller {
 
   }
 
-
   private removeLine() {
     const count = new Map()
     const shouldRemovedRow: Array<number> = []
@@ -230,18 +223,43 @@ export class Controller {
     this.updatePanel(shouldRemovedRow.length)
   }
 
+  private displayNext() {
+    this.nextPanel.innerHTML = ""
+    for (let i: number = 0; i <= 3; i++) {
+      const pos = this.nextBlock.positions[i]
+      const {row, col} = pos
+      const nextBlock = document.createElement("div");
+      nextBlock.style.top = `${(row + 1) * this.nowBlock.blockWidth}px`
+      nextBlock.style.left = `${(col + 1) * this.nowBlock.blockWidth}px`
+      nextBlock.classList.add("block")
+      this.nextPanel.appendChild(nextBlock)
+    }
+  }
+
   async start(): Promise<void> {
+
+    let currIndex = this.choose()
+    this.nowBlock = this.createBlockObject(currIndex)
+
+    let nextIndex = this.choose()
+    this.nextBlock = this.createBlockObject(nextIndex)
+
     while (this.isLive) {
 
       if (this.avaIndex.length === 0) {
         this.avaIndex = [...Array(7).keys()].concat([...Array(7).keys()])
       }
 
-      const index = this.choose()
-      this.createBlockObject(index)
+      this.displayNext()
       await this.nowBlock.run()
       this.removeLine()
       this.checkOverFlow()
+
+      this.nowBlock = this.nextBlock
+
+      let nextIndex = this.choose()
+      this.nextBlock = this.createBlockObject(nextIndex)
+
     }
   }
 
